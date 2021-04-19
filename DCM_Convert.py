@@ -2,7 +2,7 @@ import clr
 import os
 import numpy as np
 from Periphery import Counter
-
+#pyinstaller --onefile -w FDS_Convert.py
 
 def edxx2dcm(tk_psw, file_name_edxx):
 
@@ -26,68 +26,68 @@ def edxx2dcm(tk_psw, file_name_edxx):
 
     def write_dcm_value(fid, value_z, value_z_unit, dcm_label_name, parameter_longname):
         fid.write(f'FESTWERT {dcm_label_name}\n')
+        fid.write(f'   LANGNAME \"{parameter_longname}\"\n')
         if value_z_unit == "None":
-            fid.write(f'\tEINHEIT_W \"\"\n')
+            fid.write(f'   EINHEIT_W \"\"\n')
         else:
-            fid.write(f'\tEINHEIT_W \"{value_z_unit}\"\n')
-        fid.write(f'\tLANGNAME \"{parameter_longname}\"\n')
-        fid.write(f'\tWERT %.3f\n' % value_z)
-        fid.write('End\n\n')
+            fid.write(f'   EINHEIT_W \"{value_z_unit}\"\n')
+        fid.write(f'   WERT %.3f\n' % value_z)
+        fid.write('END\n\n')
         fid.close()
 
     def write_dcm_curve(fid, value_x, value_x_unit, value_z, value_z_unit, dcm_label_name, parameter_longname):
         fid.write(f'KENNLINIE {dcm_label_name} {len(value_x)}\n')
+        fid.write(f'   LANGNAME \"{parameter_longname}\"\n')
         if value_x_unit == "None":
-            fid.write(f'\tEINHEIT_X \"\"\n')
+            fid.write(f'   EINHEIT_X \"\"\n')
         else:
-            fid.write(f'\tEINHEIT_W \"{value_x_unit}\"\n')
+            fid.write(f'   EINHEIT_W \"{value_x_unit}\"\n')
         if value_z_unit == "None":
-            fid.write(f'\tEINHEIT_W \"\"\n')
+            fid.write(f'   EINHEIT_W \"\"\n')
         else:
-            fid.write(f'\tEINHEIT_W \"{value_z_unit}\"\n')
-        fid.write(f'\tLANGNAME \"{parameter_longname}\"\n')
-        fid.write(f'\tST/X')
+            fid.write(f'   EINHEIT_W \"{value_z_unit}\"\n')
+        fid.write(f'   ST/X')
         for num_value_x in value_x:
             fid.write(f'   %.3f' % num_value_x)
         fid.write(f'\n')
-        fid.write(f'\tWERT')
+        fid.write(f'   WERT')
         for num_value_z in value_z:
             fid.write(f'   %.3f' % num_value_z)
         fid.write(f'\n')
-        fid.write('End\n\n')
+        fid.write('END\n\n')
         fid.close()
 
     def write_dcm_map(fid, value_x, value_x_unit, value_y, value_y_unit, value_z, value_z_unit, dcm_label_name,
                       parameter_longname):
         fid.write(f'KENNFELD {dcm_label_name} {len(value_x)} {len(value_y)}\n')
+        fid.write(f'   LANGNAME \"{parameter_longname}\"\n')
         if (value_x_unit == "None"):
-            fid.write(f'\tEINHEIT_X \"\"\n')
+            fid.write(f'   EINHEIT_X \"\"\n')
         else:
-            fid.write(f'\tEINHEIT_X \"{value_x_unit}\"\n')
+            fid.write(f'   EINHEIT_X \"{value_x_unit}\"\n')
         if (value_y_unit == "None"):
-            fid.write(f'\tEINHEIT_Y \"\"\n')
+            fid.write(f'   EINHEIT_Y \"\"\n')
         else:
-            fid.write(f'\tEINHEIT_Y \"{value_y_unit}\"\n')
+            fid.write(f'   EINHEIT_Y \"{value_y_unit}\"\n')
         if (value_z_unit == "None"):
-            fid.write(f'\tEINHEIT_W \"\"\n')
+            fid.write(f'   EINHEIT_W \"\"\n')
         else:
-            fid.write(f'\tEINHEIT_W \"{value_z_unit}\"\n')
-        fid.write(f'\tLANGNAME \"{parameter_longname}\"\n')
-        fid.write(f'\tST/X')
+            fid.write(f'   EINHEIT_W \"{value_z_unit}\"\n')
+        fid.write(f'   ST/X')
         for num_value_x in value_x:
             fid.write(f'   %.3f' % num_value_x)
         fid.write(f'\n')
         ind = int(value_z.shape[0])
         for num_value_y in reversed(value_y):
-            fid.write(f'\tST/Y')
+            fid.write(f'   ST/Y')
             fid.write(f'   %.3f' % num_value_y)
             fid.write(f'\n')
-            fid.write(f'\tWERT')
+            fid.write(f'   WERT')
             for j in range(value_z.shape[1]):
                 fid.write(f'   %.3f' % value_z[ind - 1, j])
             ind -= 1
             fid.write(f'\n')
-        fid.write('End\n\n')
+        fid.write('END\n\n')
         fid.close()
 
 
